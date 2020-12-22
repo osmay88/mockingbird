@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Facebook Connector local testing
+
+Resources:
+  CreateStubLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: mockingbird-create-stub
+      Handler: mockingbird.main.create_stub
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 128
+      Environment:
+        Variables:
+          ENVIRONMENT: 'dev'
+          SERVICE_NAME: mockingbird
+          DYNAMO_URL: http://dynamodb:8000
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: "/create-stub"
+            Method: Post
+
+  GetStubLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: mockingbird-get-stub
+      Handler: mockingbird.main.get_all_stubs
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 128
+      Environment:
+        Variables:
+          ENVIRONMENT: 'dev'
+          SERVICE_NAME: mockingbird
+          DYNAMO_URL: http://dynamodb:8000
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: "/get-stub"
+            Method: Get
+
+
+
+  MockItLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: mockingbird-mock-it
+      Handler: mockingbird.main.mock_it
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 128
+      Environment:
+        Variables:
+          ENVIRONMENT: 'dev'
+          SERVICE_NAME: mockingbird
+          FB_GRAPH_URL: 'https://graph.facebook.com'
+          FB_API_VERSION: 'v5.0'
+          REDIS_HOST: '127.0.0.1'
+          REDIS_PORT: 6379
+          REDIS_TLS_ENABLED: false
+          REDIS_TIMEOUT: 10000
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: "/mock-it/{event+}"
+            Method: Any
+
