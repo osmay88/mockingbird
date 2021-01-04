@@ -63,8 +63,6 @@ Resources:
             Path: "/get-stub/{stub_id}"
             Method: Get
 
-
-
   MockItLambda:
     Type: AWS::Serverless::Function
     Properties:

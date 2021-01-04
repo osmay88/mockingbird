@@ -75,7 +75,7 @@ def delete_stub(stub_id: str, pattern: str):
     pass
 
 
-def get_all_stubs():
+def get_stubs(id=None):
     repo = DynamoRepository(DYNAMODB)
-    stubs = repo.get_stubs(table_name=STUBS_TABLE)
+    stubs = repo.get_stubs(table_name=STUBS_TABLE, id=id)
     return {"items": stubs}

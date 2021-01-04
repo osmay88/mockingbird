@@ -40,10 +40,10 @@ def get_all_stubs(event, context):
     returns all the stubs in the db
     """
     log = get_logger("get_stub_route")
-    path_params = event.get("pathParameters")
+    path_params = event.get("pathParameters", dict())
     log.info("Received params %s", json.dumps(path_params))
-    
-    stubs = stub_manager.get_all_stubs()
+
+    stubs = stub_manager.get_stubs(id=path_params.get("stub_id"))
     return {
         "statusCode": 200,
         "body": json.dumps(stubs, cls=DecimalEncoder)
