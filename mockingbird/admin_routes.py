@@ -30,7 +30,7 @@ def create_stub(event: dict, context):
         print(err)
 
         return {
-            'statusCode': 500,
+            'statusCode': 400,
             'body': json.dumps(str(err))
         }
 
@@ -39,6 +39,10 @@ def get_all_stubs(event, context):
     """
     returns all the stubs in the db
     """
+    log = get_logger("get_stub_route")
+    path_params = event.get("pathParameters")
+    log.info("Received params %s", json.dumps(path_params))
+    
     stubs = stub_manager.get_all_stubs()
     return {
         "statusCode": 200,

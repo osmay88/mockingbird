@@ -43,6 +43,26 @@ Resources:
             Path: "/get-stub"
             Method: Get
 
+  GetStubLambdaById:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: mockingbird-get-stub
+      Handler: mockingbird.admin_routes.get_all_stubs
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 128
+      Environment:
+        Variables:
+          ENVIRONMENT: 'dev'
+          SERVICE_NAME: mockingbird
+          DYNAMO_URL: http://dynamodb:8000
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: "/get-stub/{stub_id}"
+            Method: Get
+
 
 
   MockItLambda:

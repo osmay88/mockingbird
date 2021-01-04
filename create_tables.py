@@ -1,5 +1,6 @@
 import os
 import boto3
+from jsonschema.validators import create
 
 
 DYNAMODB = os.environ.get("DYNAMO_URL", "http://localhost:8000")
@@ -17,6 +18,19 @@ STUB_TBL = {
     "BillingMode": "PAY_PER_REQUEST"
 }
 
+PATTERN_HASH = {
+    "TableName": "Mockingbird_Pattern_Hash",
+    "KeySchema": [
+        {"AttributeName": "url_hash", "KeyType": "HASH"},
+        {"AttributeName": "stub_id", "KeyType": "RANGE"},
+    ],
+    "AttributeDefinitions": [
+        {"AttributeName": "url_hash", "AttributeType": "S"},
+        {"AttributeName": "stub_id", "AttributeType": "S"},
+    ],
+    "BillingMode": "PAY_PER_REQUEST"
+}
+
 
 def create_table(table_def: dict):
     dynamodb = boto3.resource('dynamodb', endpoint_url=DYNAMODB)
@@ -25,3 +39,4 @@ def create_table(table_def: dict):
 
 
 create_table(STUB_TBL)
+create_table(PATTERN_HASH)
