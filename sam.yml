@@ -1,13 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: Facebook Connector local testing
+Description: Local mockingbird
 
 Resources:
   CreateStubLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: mockingbird-create-stub
-      Handler: mockingbird.main.create_stub
+      Handler: mockingbird.admin_routes.create_stub
       Runtime: python3.8
       Timeout: 30
       MemorySize: 128
@@ -27,7 +27,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: mockingbird-get-stub
-      Handler: mockingbird.main.get_all_stubs
+      Handler: mockingbird.admin_routes.get_all_stubs
       Runtime: python3.8
       Timeout: 30
       MemorySize: 128
