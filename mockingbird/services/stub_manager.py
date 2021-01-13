@@ -10,7 +10,6 @@ from mockingbird.utils.consts import STUBS_TABLE, URL_HASH_TABLE
 DYNAMODB = os.environ.get("DYNAMO_URL")
 
 
-
 def hash_url(url: str):
     from hashlib import sha1
     hash = sha1(url.encode())
@@ -32,12 +31,23 @@ def validate_stub(stub_params):
     validate_existing_url(request["url"])
 
 
+def extract_namespace_from_url(url: str):
+    tokenized = url.split("/")
+    if not len(tokenized):
+        return ""
+    else:
+        return tokenized[1]
+
+
 def create_stub(event):
+    """
+    Creates a new stub object and stores it into the database.
+    """
 
     def store_stub(repo, item):
         new_stub = {
             "id": str(uuid.uuid4()),
-            "namespace": "random",
+            "namespace": extract_namespace_from_url(item["request"]["url"]),
             "stub": item
         }
         log.info("Storing stub %s" % json.dumps(new_stub))
@@ -53,8 +63,8 @@ def create_stub(event):
             "url_hash": hash_url(event["request"]["url"]),
             "stub_id": item["id"]
         }
-        hash_reponse = repo.store_url_hash(URL_HASH_TABLE, url_hash)
-        hash_metadata = hash_reponse.get("ResponseMetadata")
+        hash_response = repo.store_url_hash(URL_HASH_TABLE, url_hash)
+        hash_metadata = hash_response.get("ResponseMetadata")
         if hash_metadata.get("HTTPStatusCode") != 200:
             log.info("Http error code %s" % hash_metadata.get("HTTPStatusCode"))
             raise Exception("Error storing url hash in dynamo")
@@ -63,11 +73,8 @@ def create_stub(event):
     log.info("Creating stub with params %s" % json.dumps(event))
     validate_stub(event)
     repo = DynamoRepository(DYNAMODB)
-    new_stub = store_stub(repo, event)
-    store_url_hash(repo, new_stub)
-
-    
-    created_stub = repo.get_stubs(table_name=STUBS_TABLE, id=new_stub["id"])
+    created_stub = store_stub(repo, event)
+    store_url_hash(repo, created_stub)
     return created_stub
 
 

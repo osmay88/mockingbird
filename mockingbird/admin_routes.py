@@ -22,7 +22,7 @@ def create_stub(event: dict, context):
         response = stub_manager.create_stub(data)
         log.info("Created stub %s" % response)
         return make_response(HTTPStatus.CREATED,
-                             json.dumps(response, csl=DecimalEncoder))
+                             json.dumps(response, cls=DecimalEncoder))
     except Exception as err:
         print(err)
         return make_response(HTTPStatus.BAD_REQUEST, json.dumps(str(err)))
