@@ -1,6 +1,5 @@
 import os
 import boto3
-from jsonschema.validators import create
 
 
 DYNAMODB = os.environ.get("DYNAMO_URL", "http://localhost:8000")
