@@ -3,6 +3,9 @@ from mockingbird.services.stub_manager import create_stub
 
 
 def init_mocks(mocker: MockerFixture):
+    """
+    init the most common mocks
+    """
     def store_stub_mock(*args, **kwargs):
         return {
             "ResponseMetadata": {
@@ -10,14 +13,9 @@ def init_mocks(mocker: MockerFixture):
             }
         }
     mocker.patch(
-        "mockingbird.repository.dynamo_repository.DynamoRepository.store_stub",
+        "mockingbird.repository.dynamo_repository.DynamoRepository._put_item_in_table",
         store_stub_mock
     )
-    mocker.patch(
-        "mockingbird.repository.dynamo_repository.DynamoRepository.store_url_hash",
-        store_stub_mock
-    )
-
     mocker.patch(
         "mockingbird.repository.dynamo_repository.DynamoRepository.get_url_hash",
         return_value=[]
