@@ -1,9 +1,6 @@
 import json
-
 from pytest_mock import MockerFixture
-
 from mockingbird.admin_routes import create_stub
-from tests import *
 
 
 def test_admin_create_stub(mocker: MockerFixture):
@@ -43,3 +40,46 @@ def test_admin_create_stub(mocker: MockerFixture):
     body = json.loads(response.get("body"))
     stub = body.get("stub")
     assert stub is not None
+
+
+def test_create_stub_empty_body(mocker: MockerFixture):
+    new_stub_request = {
+        "body": ""
+    }
+
+    response = create_stub(new_stub_request, None)
+    assert response['statusCode'] == 400
+    assert response.get("body") == "Missing request body"
+
+
+def test_create_stub_already_exists(mocker: MockerFixture):
+    def get_url_hash_mock(*args, **kwargs):
+        return [{
+            "stub_id": "this_is_an_existing_stub"
+        }]
+    mocker.patch(
+        "mockingbird.repository.dynamo_repository.DynamoRepository.get_url_hash",
+        get_url_hash_mock
+    )
+
+    stub_body = {
+        "request": {
+            "method": "GET",
+            "url": "/some/thing"
+        },
+        "response": {
+            "status": 200,
+            "body": "Hello world!",
+            "headers": {
+                "Content-Type": "text/plain"
+            }
+        }
+    }
+
+    new_stub_request = {
+        "body": json.dumps(stub_body)
+    }
+
+    response = create_stub(new_stub_request, None)
+    assert response['statusCode'] == 400
+    assert response.get("body") == "An stub already exist using the same url pattern, stub id: this_is_an_existing_stub"
