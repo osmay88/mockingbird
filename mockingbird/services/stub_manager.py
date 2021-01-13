@@ -2,8 +2,6 @@ import os
 import json
 import uuid
 
-from jsonschema import ValidationError
-
 from mockingbird.repository.dynamo_repository import DynamoRepository
 from mockingbird.utils import hash_url, extract_namespace_from_url
 from mockingbird.utils.logger import get_logger
@@ -28,6 +26,7 @@ def validate_stub(stub_params):
 
     def validate_stub_schema(stub):
         from jsonschema import validate
+        from jsonschema import ValidationError
         try:
             return validate(stub, STUB_OBJECT)
         except ValidationError as err:
@@ -77,9 +76,9 @@ def create_stub(event):
     log = get_logger("create_stub")
     log.info("Creating stub with params %s" % json.dumps(event))
     validate_stub(event)
-    repo = DynamoRepository(DYNAMODB)
-    created_stub = store_stub(repo, event)
-    store_url_hash(repo, created_stub)
+    repository = DynamoRepository(DYNAMODB)
+    created_stub = store_stub(repository, event)
+    store_url_hash(repository, created_stub)
     return created_stub
 
 
@@ -87,7 +86,7 @@ def delete_stub(stub_id: str, pattern: str):
     pass
 
 
-def get_stubs(id=None):
+def get_stubs(stub_id=None):
     repo = DynamoRepository(DYNAMODB)
-    stubs = repo.get_stubs(id=id)
+    stubs = repo.get_stubs(id=stub_id)
     return {"items": stubs}

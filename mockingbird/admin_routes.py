@@ -14,7 +14,7 @@ def create_stub(event: dict, context):
 
     body = event.get("body")
     if not body:
-        return make_response(HTTPStatus.BAD_REQUEST, "Missing request body")
+        return make_response(HTTPStatus.BAD_REQUEST, error="Missing request body")
     data = json.loads(body)
     log.info("stub to create %s" % json.dumps(data))
     try:
@@ -24,7 +24,7 @@ def create_stub(event: dict, context):
                              json.dumps(response, cls=DecimalEncoder))
     except Exception as err:
         log.error("an exception has occur while creating the stub %s" % err)
-        return make_response(HTTPStatus.BAD_REQUEST, str(err))
+        return make_response(HTTPStatus.BAD_REQUEST, error=str(err))
 
 
 def get_all_stubs(event, context):

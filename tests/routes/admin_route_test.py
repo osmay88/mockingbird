@@ -46,10 +46,9 @@ def test_create_stub_empty_body(mocker: MockerFixture):
     new_stub_request = {
         "body": ""
     }
-
     response = create_stub(new_stub_request, None)
     assert response['statusCode'] == 400
-    assert response.get("body") == "Missing request body"
+    assert json.loads(response.get("body")) == {"error": "Missing request body"}
 
 
 def test_create_stub_already_exists(mocker: MockerFixture):
@@ -82,4 +81,4 @@ def test_create_stub_already_exists(mocker: MockerFixture):
 
     response = create_stub(new_stub_request, None)
     assert response['statusCode'] == 400
-    assert response.get("body") == "An stub already exist using the same url pattern, stub id: this_is_an_existing_stub"
+    assert json.loads(response.get("body")) == {"error": "An stub already exist using the same url pattern, stub id: this_is_an_existing_stub"}
