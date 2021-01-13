@@ -42,8 +42,8 @@ def test_create_create_stub(mocker: MockerFixture):
 
     response = create_stub(stub_body)
 
-    assert response["id"] is not None
-    assert response["namespace"] == "namespace"
+    assert response["id"] is not None, "The new stub should have an id"
+    assert response["namespace"] == "namespace", "the first part of the url should used as namespace"
     assert response["stub"] == stub_body
 
 
@@ -59,8 +59,8 @@ def test_create_stub_wrong_schema(mocker: MockerFixture):
         }
     }
     try:
-        response = create_stub(stub_body)
+        create_stub(stub_body)
     except Exception as err:
         assert str(err) == "The schema validation for the stub failed with error: 'request' is a required property"
         return
-    assert False
+    assert False, "An exception should have been thrown since the schema is invalid"
