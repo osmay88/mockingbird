@@ -5,18 +5,13 @@ import uuid
 from jsonschema import ValidationError
 
 from mockingbird.repository.dynamo_repository import DynamoRepository
+from mockingbird.utils import hash_url, extract_namespace_from_url
 from mockingbird.utils.logger import get_logger
 from mockingbird.schemas.stub import STUB_OBJECT
 from mockingbird.utils.consts import STUBS_TABLE, URL_HASH_TABLE
 
 
 DYNAMODB = os.environ.get("DYNAMO_URL")
-
-
-def hash_url(url: str):
-    from hashlib import sha1
-    hash = sha1(url.encode())
-    return hash.hexdigest()
 
 
 def validate_stub(stub_params):
@@ -48,14 +43,6 @@ def validate_stub(stub_params):
         raise Exception("request object missing in stub")
 
     validate_existing_url(request["url"])
-
-
-def extract_namespace_from_url(url: str):
-    tokenized = url.split("/")
-    if not len(tokenized):
-        return ""
-    else:
-        return tokenized[1]
 
 
 def create_stub(event):
