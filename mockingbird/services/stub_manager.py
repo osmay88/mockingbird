@@ -1,6 +1,9 @@
 import os
 import json
 import uuid
+
+from jsonschema import ValidationError
+
 from mockingbird.repository.dynamo_repository import DynamoRepository
 from mockingbird.utils.logger import get_logger
 from mockingbird.schemas.stub import STUB_OBJECT
@@ -17,12 +20,28 @@ def hash_url(url: str):
 
 
 def validate_stub(stub_params):
+    """
+    Validates is a stub structure is correct.
+    validates that the stub schema is correct.
+    :param stub_params:
+    """
     def validate_existing_url(url: str):
         repo = DynamoRepository(DYNAMODB)
         hashed_url = hash_url(url)
         result = repo.get_url_hash(URL_HASH_TABLE, hashed_url)
         if len(result):
             raise Exception("An stub already exist using the same url pattern, stub id: %s" % result[0]["stub_id"])
+
+    def validate_stub_schema(stub):
+        from jsonschema import validate
+        try:
+            return validate(stub, STUB_OBJECT)
+        except ValidationError as err:
+            raise Exception("The schema validation for the stub failed with error: %s" % err.message)
+
+    # Validates that the stub schema is correctly formatted
+    # when running from SAM local, comment this line
+    validate_stub_schema(stub_params)
 
     request = stub_params.get("request")
     if not request:
