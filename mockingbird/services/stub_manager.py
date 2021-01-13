@@ -8,7 +8,6 @@ from mockingbird.repository.dynamo_repository import DynamoRepository
 from mockingbird.utils import hash_url, extract_namespace_from_url
 from mockingbird.utils.logger import get_logger
 from mockingbird.schemas.stub import STUB_OBJECT
-from mockingbird.utils.consts import STUBS_TABLE, URL_HASH_TABLE
 
 
 DYNAMODB = os.environ.get("DYNAMO_URL")
@@ -23,7 +22,7 @@ def validate_stub(stub_params):
     def validate_existing_url(url: str):
         repo = DynamoRepository(DYNAMODB)
         hashed_url = hash_url(url)
-        result = repo.get_url_hash(URL_HASH_TABLE, hashed_url)
+        result = repo.get_url_hash(hashed_url)
         if len(result):
             raise Exception("An stub already exist using the same url pattern, stub id: %s" % result[0]["stub_id"])
 
@@ -57,7 +56,7 @@ def create_stub(event):
             "stub": item
         }
         log.info("Storing stub %s" % json.dumps(new_stub))
-        response = repo.store_stub(table_name=STUBS_TABLE, item=new_stub)
+        response = repo.store_stub(item=new_stub)
         metadata = response.get("ResponseMetadata")
 
         if metadata.get("HTTPStatusCode") != 200:
@@ -69,7 +68,7 @@ def create_stub(event):
             "url_hash": hash_url(event["request"]["url"]),
             "stub_id": item["id"]
         }
-        hash_response = repo.store_url_hash(URL_HASH_TABLE, url_hash)
+        hash_response = repo.store_url_hash(url_hash)
         hash_metadata = hash_response.get("ResponseMetadata")
         if hash_metadata.get("HTTPStatusCode") != 200:
             log.info("Http error code %s" % hash_metadata.get("HTTPStatusCode"))
@@ -90,5 +89,5 @@ def delete_stub(stub_id: str, pattern: str):
 
 def get_stubs(id=None):
     repo = DynamoRepository(DYNAMODB)
-    stubs = repo.get_stubs(table_name=STUBS_TABLE, id=id)
+    stubs = repo.get_stubs(id=id)
     return {"items": stubs}
