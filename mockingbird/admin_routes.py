@@ -32,7 +32,7 @@ def get_all_stubs(event, context):
     returns all the stubs in the db
     """
     log = get_logger("get_stub_route")
-    path_params = event.get("pathParameters", dict())
+    path_params = event.get("pathParameters") or dict()
     log.info("Received params %s", json.dumps(path_params))
-    stubs = stub_manager.get_stubs(id=path_params.get("stub_id"))
+    stubs = stub_manager.get_stubs(stub_id=path_params.get("stub_id"))
     return make_response(HTTPStatus.OK, json.dumps(stubs, cls=DecimalEncoder))

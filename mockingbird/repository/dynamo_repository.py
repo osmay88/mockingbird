@@ -20,10 +20,12 @@ class DynamoRepository:
     def get_stubs(self, stub_id=None, namespace=None):
         log.info("Getting stub with id %s" % stub_id)
         table = self._client.Table(STUBS_TABLE)
-        if not id and not namespace:
+        if not stub_id and not namespace:
             return table.scan().get("Items", [])
         response = table.query(KeyConditionExpression=Key('id').eq(stub_id))
-        return response.get("Items")[0]
+        if response.get("Items"):
+            return response.get("Items")[0]
+        return []
 
     def store_stub(self, item: dict):
         return self._put_item_in_table(STUBS_TABLE, item)
