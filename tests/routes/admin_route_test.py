@@ -56,6 +56,7 @@ def test_create_stub_already_exists(mocker: MockerFixture):
         return [{
             "stub_id": "this_is_an_existing_stub"
         }]
+
     mocker.patch(
         "mockingbird.repository.dynamo_repository.DynamoRepository.get_url_hash",
         get_url_hash_mock
