@@ -91,5 +91,5 @@ def delete_stub(stub_id: str, pattern: str):
 
 def get_stubs(stub_id=None):
     repo = DynamoRepository(DYNAMODB)
-    stubs = repo.get_stubs(id=stub_id)
+    stubs = repo.get_stubs(stub_id=stub_id)
     return {"items": stubs}
