@@ -15,10 +15,10 @@ class UUIDExtension(Extension):
         line_no = next(parser.stream).lineno
 
         return nodes.CallBlock(
-            self.call_method("_get_date"), [], [], ''
+            self.call_method("_get_uuid"), [], [], ''
         ).set_lineno(line_no)
 
-    def _get_date(self, *args, **kwargs):
+    def _get_uuid(self, *args, **kwargs):
         import uuid
         uuid_ = uuid.uuid4()
         return uuid_.hex
