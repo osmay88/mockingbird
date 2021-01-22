@@ -1,5 +1,5 @@
 from pytest_mock import MockerFixture
-from mockingbird.services.stub_manager import create_stub, get_stubs
+from mockingbird.services.stub_manager import create_stub, get_stub
 
 
 def get_stubs_mocks(*args, **kwargs):
@@ -91,6 +91,6 @@ def test_create_stub_wrong_schema(mocker: MockerFixture):
 
 def test_get_all_stubs(mocker: MockerFixture):
     init_mocks(mocker)
-    stubs = get_stubs("any_random_id")
+    stubs = get_stub("any_random_id")
     assert len(stubs), "should contain a items array"
     assert len(stubs["items"]), "one item should be present"

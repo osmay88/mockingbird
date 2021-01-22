@@ -27,12 +27,15 @@ def create_stub(event: dict, context):
         return make_response(HTTPStatus.BAD_REQUEST, error=str(err))
 
 
-def get_all_stubs(event, context):
+def get_stub(event, context):
     """
     returns all the stubs in the db
     """
     log = get_logger("get_stub_route")
-    path_params = event.get("pathParameters") or dict()
-    log.info("Received params %s", json.dumps(path_params))
-    stubs = stub_manager.get_stubs(stub_id=path_params.get("stub_id"))
+    path_params = event.get("pathParameters")
+    stub_id = None
+    if path_params:
+        log.info("Received params %s", json.dumps(path_params))
+        stub_id = path_params.get("stub_id")
+    stubs = stub_manager.get_stub(stub_id)
     return make_response(HTTPStatus.OK, json.dumps(stubs, cls=DecimalEncoder))

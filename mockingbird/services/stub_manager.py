@@ -89,7 +89,7 @@ def delete_stub(stub_id: str, pattern: str):
     pass
 
 
-def get_stubs(stub_id=None):
+def get_stub(stub_id=None):
     repo = DynamoRepository(DYNAMODB)
     stubs = repo.get_stubs(stub_id=stub_id)
     return {"items": stubs}

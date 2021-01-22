@@ -27,7 +27,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: mockingbird-get-stub
-      Handler: mockingbird.admin_routes.get_all_stubs
+      Handler: mockingbird.admin_routes.get_stub
       Runtime: python3.8
       Timeout: 30
       MemorySize: 128
@@ -47,7 +47,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: mockingbird-get-stub
-      Handler: mockingbird.admin_routes.get_all_stubs
+      Handler: mockingbird.admin_routes.get_stub
       Runtime: python3.8
       Timeout: 30
       MemorySize: 128
