@@ -1,7 +1,5 @@
 import json
 from mockingbird.services import stub_manager
-from mockingbird.utils.logger import get_logger
-from mockingbird.utils.decimal_encoder import DecimalEncoder
 
 
 def mock_it(event: dict, context):
