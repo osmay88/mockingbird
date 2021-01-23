@@ -11,5 +11,7 @@ def create_table(table_def: dict):
     table = dynamodb.create_table(**table_def)
     return table
 
-for tbl in DYNAMO_TABLES:
-    create_table(tbl)
+
+
+# for tbl in DYNAMO_TABLES:
+#     create_table(tbl)

@@ -67,6 +67,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: mockingbird-mock-it
+      CodeUri: .
       Handler: mockingbird.main.mock_it
       Runtime: python3.8
       Timeout: 30

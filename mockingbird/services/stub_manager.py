@@ -37,7 +37,7 @@ def validate_stub(stub_params):
 
     # Validates that the stub schema is correctly formatted
     # when running from SAM local, comment this line
-    validate_stub_schema(stub_params)
+    # validate_stub_schema(stub_params)
 
     request = stub_params.get("request")
     if not request:
@@ -89,7 +89,7 @@ def delete_stub(stub_id: str, pattern: str):
     pass
 
 
-def get_stub(stub_id=None):
+def get_stub(stub_id=None, namespace=None):
     repo = DynamoRepository(DYNAMODB)
-    stubs = repo.get_stubs(stub_id=stub_id)
+    stubs = repo.get_stubs(stub_id=stub_id, namespace=namespace)
     return {"items": stubs}
