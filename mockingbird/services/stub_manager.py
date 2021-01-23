@@ -37,7 +37,7 @@ def validate_stub(stub_params):
 
     # Validates that the stub schema is correctly formatted
     # when running from SAM local, comment this line
-    # validate_stub_schema(stub_params)
+    validate_stub_schema(stub_params)
 
     request = stub_params.get("request")
     if not request:

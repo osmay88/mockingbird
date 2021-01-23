@@ -1,6 +1,6 @@
 import json
 from pytest_mock import MockerFixture
-from mockingbird.admin_routes import create_stub
+from mockingbird.routes.admin_routes import create_stub
 
 
 def test_admin_create_stub(mocker: MockerFixture):
