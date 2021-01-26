@@ -21,7 +21,7 @@ def mock_it(namespace, path, *args, **kwargs):
 
 
 @app.route("/__admin/mappings", methods=["POST", "GET"])
-@app.route("/__admin/mappings/<stub_id>", methods=["POST", "GET"])
+@app.route("/__admin/mappings/<stub_id>", methods=["PUT", "GET"])
 def create_stub_(stub_id=None, *args, **kwargs):
     if request.method == "GET":
         # TODO: get all the stubs or a specific one
@@ -32,9 +32,12 @@ def create_stub_(stub_id=None, *args, **kwargs):
         )
         return response
     elif request.method == "POST":
-        data = request.json
-        new_stub = create_stub(data)
-        return jsonify(new_stub), 201
+        try:
+            data = request.json
+            new_stub = create_stub(data)
+            return jsonify(new_stub), 201
+        except Exception as err:
+            return str(err), 500
     else:
         return "Uh yeah", 204
 
