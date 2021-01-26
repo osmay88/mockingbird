@@ -38,19 +38,24 @@ class DynamoRepository:
         if not stub_id and not namespace:
             return table.scan().get("Items", [])
 
-        if stub_id:  # TODO refactor this shitty code
+        if stub_id:  # TODO refactor the shit out of this
             query = Key('id').eq(stub_id)
+            index_name = None
             log.info("using id as key for query")
         if namespace and stub_id:
             query = Key('id').eq(stub_id) & Key("namespace").eq(namespace)
+            index_name = None
             log.info("using id and namespace as key for query")
         elif not stub_id and namespace:
             log.info("using namespace as key for query")
+            index_name = "NamespaceIndex"
             query = Key("namespace").eq(namespace)
-
-        response = table.query(KeyConditionExpression=query)
+        if index_name:
+            response = table.query(IndexName="NamespaceIndex", KeyConditionExpression=query)
+        else:
+            response = table.query(KeyConditionExpression=query)
         if response.get("Items"):
-            return response.get("Items")[0]
+            return response.get("Items")
         return []
 
     def store_stub(self, item: dict):

@@ -10,7 +10,14 @@ app = Flask(__name__)
 
 @app.route("/mock-it/<namespace>/<path:path>")
 def mock_it(namespace, path, *args, **kwargs):
-    return "You made it", 200
+    url = "/%s/%s" % (namespace, path)
+    raw_response = handle_request(path=url, method=request.method, headers=None, body=request.json)
+
+    response = app.response_class(
+        response=json.dumps(raw_response["body"], cls=DecimalEncoder),
+        mimetype='application/json'
+    )
+    return response, int(raw_response["status"])
 
 
 @app.route("/__admin/mappings", methods=["POST", "GET"])
@@ -27,11 +34,11 @@ def create_stub_(stub_id=None, *args, **kwargs):
     elif request.method == "POST":
         data = request.json
         new_stub = create_stub(data)
-        return jsonify(new_stub,  cls=DecimalEncoder), 201
+        return jsonify(new_stub), 201
     else:
         return "Uh yeah", 204
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
 
