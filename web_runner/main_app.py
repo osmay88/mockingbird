@@ -1,3 +1,6 @@
+"""
+TODO: this is only for testing without having to run all the local lambda server.
+"""
 import json
 from flask import Flask, request, jsonify
 
