@@ -5,7 +5,7 @@ from mockingbird.services import stub_manager
 from mockingbird.utils import extract_namespace_from_url
 
 
-def handle_request(path: str, method: str, headers: dict, body: dict) -> str:
+def handle_request(path: str, method: str, headers: dict, body: dict):
     """
     Processes an incoming request and return the string body
     if the mock doesn't exist we return an exception
