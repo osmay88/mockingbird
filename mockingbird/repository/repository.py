@@ -28,4 +28,4 @@ class Repository:
         elif storage_cls == "Redis":
             raise NotImplemented("Redis storage not impleted yet")
         else:
-            raise Exception("Unknow storage system, valid options are: %s" % STORAGE_OPTIONS)
+            raise Exception("Unknown storage system, valid options are: %s" % STORAGE_OPTIONS)

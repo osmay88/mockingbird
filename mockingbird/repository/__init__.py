@@ -2,6 +2,9 @@ import abc
 
 
 class IRepository(metaclass=abc.ABCMeta):
+    """
+    This is the general repository implementation
+    """
 
     @abc.abstractmethod
     def get_stubs(self, stub_id=None, namespace=None):
