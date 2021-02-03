@@ -2,7 +2,7 @@ import json
 
 
 class MockingException(Exception):
-    def __init__(self, msg, error_code, http_status_code, *args, **kwargs):
+    def __init__(self, msg, error_code, http_status_code=None, *args, **kwargs):
         super(MockingException, self).__init__(*args, **kwargs)
         self.msg = msg
         self.error_code = error_code
