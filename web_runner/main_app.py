@@ -7,8 +7,19 @@ from flask import Flask, request, jsonify
 from mockingbird.services.request_manager import handle_request
 from mockingbird.services.stub_manager import get_stub, create_stub
 from mockingbird.utils.decimal_encoder import DecimalEncoder
+from mockingbird.utils.exc import MockingException
 
 app = Flask(__name__)
+
+
+@app.errorhandler(MockingException)
+def handle_error(error):
+    return app.response_class(
+        response=str(error),
+        mimetype='application/json',
+        status=error.error_code
+    )
+
 
 
 @app.route("/mock-it/<namespace>/<path:path>")

@@ -17,7 +17,7 @@ def validate_existing_url(url: str):
     hashed_url = hash_url(url)
     result = repo.get_url_hash(hashed_url)
     if len(result):
-        raise MockingException(msg="An stub already exist using the same url pattern, stub id: %s" % result[0]["stub_id"], code=400)
+        raise MockingException(msg="An stub already exist using the same url pattern, stub id: %s" % result[0]["stub_id"], error_code=400)
 
 
 def validate_stub_schema(stub):
@@ -26,7 +26,7 @@ def validate_stub_schema(stub):
     try:
         return validate(stub, STUB_OBJECT)
     except ValidationError as err:
-        raise MockingException(msg="The schema validation for the stub failed with error: %s" % err.message, code=400)
+        raise MockingException(msg="The schema validation for the stub failed with error: %s" % err.message, error_code=400)
 
 
 def validate_stub(stub_params):
@@ -42,7 +42,7 @@ def validate_stub(stub_params):
 
     request = stub_params.get("request")
     if not request:
-        raise MockingException(msg="request object missing in stub", code=500)
+        raise MockingException(msg="request object missing in stub", error_code=500)
 
     validate_existing_url(request["url"])
 
@@ -96,4 +96,4 @@ def get_stub(stub_id=None, namespace=None):
         stubs = repo.get_stubs(stub_id=stub_id, namespace=namespace)
         return {"items": stubs}
     except Exception as err:
-        raise MockingException(msg=str(err), code=500)
+        raise MockingException(msg=str(err), error_code=500)

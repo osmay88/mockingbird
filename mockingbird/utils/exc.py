@@ -1,16 +1,17 @@
 import json
 
 
-class MockingException(BaseException):
-    def __init__(self, msg, code, *args, **kwargs):
+class MockingException(Exception):
+    def __init__(self, msg, error_code, http_status_code, *args, **kwargs):
         super(MockingException, self).__init__(*args, **kwargs)
         self.msg = msg
-        self.code = code
+        self.error_code = error_code
+        self.http_status_code = http_status_code
 
     def to_json(self):
         return {
-            "code": self.code,
-            "error": self.code,
+            "error_code": self.error_code,
+            "error": self.msg,
         }
 
     def __repr__(self):
