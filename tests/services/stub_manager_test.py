@@ -84,7 +84,7 @@ def test_create_stub_wrong_schema(mocker: MockerFixture):
     try:
         create_stub(stub_body)
     except Exception as err:
-        assert str(err) == "The schema validation for the stub failed with error: 'request' is a required property"
+        assert str(err) == '{"error_code": 400, "error": "The schema validation for the stub failed with error: \'request\' is a required property"}'
         return
     assert False, "An exception should have been thrown since the schema is invalid"
 
