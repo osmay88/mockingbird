@@ -1,19 +1,15 @@
-import os
 import json
 import uuid
 
-from mockingbird.repository.dynamo_repository import DynamoRepository
+from mockingbird.repository.repository import Repository
+from mockingbird.schemas.stub import STUB_OBJECT
 from mockingbird.utils import hash_url, extract_namespace_from_url
 from mockingbird.utils.exc import MockingException
 from mockingbird.utils.logger import get_logger
-from mockingbird.schemas.stub import STUB_OBJECT
-
-
-DYNAMODB = os.environ.get("DYNAMO_URL")
 
 
 def validate_existing_url(url: str):
-    repo = DynamoRepository(DYNAMODB)
+    repo = Repository.get_repository()
     hashed_url = hash_url(url)
     result = repo.get_url_hash(hashed_url)
     if len(result):
@@ -80,7 +76,7 @@ def create_stub(event):
     log = get_logger("create_stub")
     log.info("Creating stub with params %s" % json.dumps(event))
     validate_stub(event)
-    repository = DynamoRepository(DYNAMODB)
+    repository = Repository.get_repository()
     created_stub = store_stub(repository, event)
     store_url_hash(repository, created_stub)
     return created_stub
@@ -92,7 +88,7 @@ def delete_stub(stub_id: str, pattern: str):
 
 def get_stub(stub_id=None, namespace=None):
     try:
-        repo = DynamoRepository(DYNAMODB)
+        repo = Repository.get_repository()
         stubs = repo.get_stubs(stub_id=stub_id, namespace=namespace)
         return {"items": stubs}
     except Exception as err:

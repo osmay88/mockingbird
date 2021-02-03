@@ -6,13 +6,14 @@ from mockingbird.dynamo_tables import (STUB_TBL,
                                        STUB_TABLE_NAME,
                                        PATTERN_HASH_TBL,
                                        PATTERN_HASH_TABLE_NAME,)
+from mockingbird.repository import IRepository
 from mockingbird.utils.logger import get_logger
 
 
 log = get_logger("create_stub")
 
 
-class DynamoRepository:
+class DynamoRepository(IRepository):
     def __init__(self, dynamo_url: str):
         self._client = boto3.resource("dynamodb", endpoint_url=dynamo_url)
 
