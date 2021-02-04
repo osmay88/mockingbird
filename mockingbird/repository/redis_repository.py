@@ -19,5 +19,5 @@ class RedisRepository(IRepository):
     def get_stubs(self, stub_id=None, namespace=None):
         pass
 
-    def __init__(self, host, port, password):
+    def __init__(self, host, port, password=None):
         self._client = redis.Redis(host, port, password)
