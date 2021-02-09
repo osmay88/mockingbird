@@ -15,11 +15,11 @@ class IRepository(metaclass=abc.ABCMeta):
         raise NotImplemented("Method not implemented")
 
     @abc.abstractmethod
-    def clean_stub(self, filter_query=None):
+    def clean_stub(self, stub_id: str=None, namespace:str=None):
         raise NotImplemented("Method not implemented")
 
     @abc.abstractmethod
-    def get_url_hash(self, hash_url: str):
+    def get_url_hash(self, hash_url: str, stub_id: str):
         raise NotImplemented("Method not implemented")
 
     @abc.abstractmethod
