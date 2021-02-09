@@ -1,4 +1,5 @@
 import json
+from os import environ
 from pytest_mock import MockerFixture
 from mockingbird.routes.admin_routes import create_stub
 
@@ -52,6 +53,8 @@ def test_create_stub_empty_body(mocker: MockerFixture):
 
 
 def test_create_stub_already_exists(mocker: MockerFixture):
+    environ["MOCKINGBIRD_STORAGE"] = "Dynamo"
+
     def get_url_hash_mock(*args, **kwargs):
         return [{
             "stub_id": "this_is_an_existing_stub"

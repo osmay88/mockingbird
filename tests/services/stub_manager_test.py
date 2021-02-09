@@ -1,3 +1,4 @@
+from os import environ
 from pytest_mock import MockerFixture
 from mockingbird.services.stub_manager import create_stub, get_stub
 
@@ -27,6 +28,8 @@ def init_mocks(mocker: MockerFixture):
     """
     init the most common mocks
     """
+    environ["MOCKINGBIRD_STORAGE"] = "Dynamo"
+
     def store_stub_mock(*args, **kwargs):
         return {
             "ResponseMetadata": {
