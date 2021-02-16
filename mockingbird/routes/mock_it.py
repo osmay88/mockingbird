@@ -7,9 +7,12 @@ from mockingbird.utils.logger import get_logger
 
 
 def mock_it(event: dict, context=None):
-    # this path file will contain the requested path
+    """
+    This is the endpoint handling the mock requests
+    """
     log = get_logger("mock_it_route")
-    path_params = event.get("pathParameters")
+    log.debug("Received event %s" % json.dumps(event))
+    path_params: dict = event.get("pathParameters")
     if not path_params:
         return make_response(HTTPStatus.BAD_REQUEST, error="pathParameters is missing")
 
@@ -20,12 +23,10 @@ def mock_it(event: dict, context=None):
     if not path_event.startswith("/"):
         path_event = "/" + path_event
 
-    log.debug(json.dumps(event))
-    method = event.get("httpMethod")  # http method used in the call
+    method = event.get("httpMethod")
     body = event.get("body")
     headers = event.get("headers")
 
-    log.debug("% %s", path_event, method)
     try:
         result = request_manager.handle_request(path_event, method, headers, body)
         return {
