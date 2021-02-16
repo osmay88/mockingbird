@@ -28,7 +28,7 @@ def create_stub(event: dict, context):
         return make_response(err.error_code, error=err.msg)
     except Exception as err:
         log.error("an exception has occur while creating the stub %s" % err)
-        return make_response(HTTPStatus.BAD_REQUEST, error=str(err))
+        return make_response(HTTPStatus.INTERNAL_SERVER_ERROR, error=str(err))
 
 
 def get_stub(event, context):

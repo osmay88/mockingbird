@@ -43,36 +43,39 @@ def validate_stub(stub_params):
     validate_existing_url(request["url"])
 
 
+def store_stub(repo, item):
+    log = get_logger("store_stub")
+    new_stub = {
+        "id": str(uuid.uuid4()),
+        "namespace": extract_namespace_from_url(item["request"]["url"]),
+        "stub": item
+    }
+    log.info("Storing stub %s" % json.dumps(new_stub))
+    response = repo.store_stub(item=new_stub)
+    metadata = response.get("ResponseMetadata")
+
+    if metadata.get("HTTPStatusCode") != 200:
+        raise Exception("Error storing stub in dynamo")
+    return new_stub
+
+
+def store_url_hash(repo, item):
+    log = get_logger("store_url_hash")
+    url_hash = {
+        "url_hash": hash_url(item["stub"]["request"]["url"]),
+        "stub_id": item["id"]
+    }
+    hash_response = repo.store_url_hash(url_hash)
+    hash_metadata = hash_response.get("ResponseMetadata")
+    if hash_metadata.get("HTTPStatusCode") != 200:
+        log.info("Http error code %s" % hash_metadata.get("HTTPStatusCode"))
+        raise Exception("Error storing url hash in dynamo")
+
+
 def create_stub(event):
     """
     Creates a new stub object and stores it into the database.
     """
-
-    def store_stub(repo, item):
-        new_stub = {
-            "id": str(uuid.uuid4()),
-            "namespace": extract_namespace_from_url(item["request"]["url"]),
-            "stub": item
-        }
-        log.info("Storing stub %s" % json.dumps(new_stub))
-        response = repo.store_stub(item=new_stub)
-        metadata = response.get("ResponseMetadata")
-
-        if metadata.get("HTTPStatusCode") != 200:
-            raise Exception("Error storing stub in dynamo")
-        return new_stub
-
-    def store_url_hash(repo, item):
-        url_hash = {
-            "url_hash": hash_url(event["request"]["url"]),
-            "stub_id": item["id"]
-        }
-        hash_response = repo.store_url_hash(url_hash)
-        hash_metadata = hash_response.get("ResponseMetadata")
-        if hash_metadata.get("HTTPStatusCode") != 200:
-            log.info("Http error code %s" % hash_metadata.get("HTTPStatusCode"))
-            raise Exception("Error storing url hash in dynamo")
-
     log = get_logger("create_stub")
     log.info("Creating stub with params %s" % json.dumps(event))
     validate_stub(event)
