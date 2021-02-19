@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 from mockingbird.services import request_manager
 from mockingbird.utils.aws_utils import make_response
+from mockingbird.utils.exc import MockingException
 from mockingbird.utils.logger import get_logger
 
 
@@ -28,10 +29,9 @@ def mock_it(event: dict, context=None):
     headers = event.get("headers")
 
     try:
-        result = request_manager.handle_request(path_event, method, headers, body)
-        return {
-            'statusCode': 200,
-            'body': result
-        }
+        return request_manager.handle_request(path_event, method, headers, body)
+    except MockingException as err:
+        log.error("an exception has occur while handling a request %s" % err)
+        return make_response(err.error_code, error=err.msg)
     except Exception as err:
         return make_response(500, str(err))
