@@ -1,0 +1,20 @@
+{
+  "id": "33c7dc12-7a99-4d62-aa06-fa87055cc8f7",
+  "request": {
+    "url": "/my/resource",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/xml"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "<response>Some content</response>",
+    "headers": {
+      "Content-Type": "text/xml"
+    }
+  },
+  "uuid": "33c7dc12-7a99-4d62-aa06-fa87055cc8f7"
+}

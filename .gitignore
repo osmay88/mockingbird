@@ -4,3 +4,8 @@ venv/
 .aws-sam/*
 .idea/
 .vscode/
+
+# java shit
+target/
+*.classpath
+*.iml
