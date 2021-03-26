@@ -24,7 +24,9 @@ STUB_OBJECT = {
     "type": "object",
     "properties": {
         "request": STUB_REQUEST,
-        "response": STUB_RESPONSE
+        "response": STUB_RESPONSE,
+        "id": {"type": "string"},
+        "uuid": {"type": "string"},
     },
     "required": ["request", "response"],
     "additionalProperties": False

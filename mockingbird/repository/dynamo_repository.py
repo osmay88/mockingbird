@@ -75,7 +75,7 @@ class DynamoRepository(IRepository):
         if response:  # if the stub was deleted also clean the hash table
             self._delete_item_from_table(PATTERN_HASH_TABLE_NAME, stub_id)
 
-    def get_url_hash(self, hash_url: str, stub_id: str):
+    def get_url_hash(self, hash_url: str = None, stub_id: str = None):
         table = self._client.Table(PATTERN_HASH_TABLE_NAME)
         result = None
         if not hash_url and not stub_id:
