@@ -8,6 +8,7 @@ from mockingbird.services.request_manager import handle_request
 from mockingbird.services.stub_manager import get_stub, create_stub
 from mockingbird.utils.decimal_encoder import DecimalEncoder
 from mockingbird.utils.exc import MockingException
+from mockingbird.utils.logger import get_logger
 
 app = Flask(__name__)
 
@@ -19,7 +20,6 @@ def handle_error(error):
         mimetype='application/json',
         status=error.error_code
     )
-
 
 
 @app.route("/mock-it/<namespace>/<path:path>")
@@ -37,6 +37,14 @@ def mock_it(namespace, path, *args, **kwargs):
 @app.route("/__admin/mappings", methods=["POST", "GET"])
 @app.route("/__admin/mappings/<stub_id>", methods=["PUT", "GET"])
 def create_stub_(stub_id=None, *args, **kwargs):
+    LOGGER = get_logger("create_stub")
+
+    def get_data_from_request():
+        if not request.json:
+            raw_data = request.data.decode()
+            return json.loads(raw_data)
+        return request.json
+
     if request.method == "GET":
         # TODO: get all the stubs or a specific one
         stubs = get_stub(stub_id=stub_id)
@@ -47,10 +55,11 @@ def create_stub_(stub_id=None, *args, **kwargs):
         return response
     elif request.method == "POST":
         try:
-            data = request.json
+            data = get_data_from_request()
             new_stub = create_stub(data)
             return jsonify(new_stub), 201
         except Exception as err:
+            LOGGER.error(err)
             return str(err), 500
     else:
         return "Uh yeah", 204
