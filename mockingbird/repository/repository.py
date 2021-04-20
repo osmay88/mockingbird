@@ -27,7 +27,7 @@ class Repository:
         """
         storage_cls = os.environ.get("MOCKINGBIRD_STORAGE", DYNAMO_OPTION)
         if storage_cls == DYNAMO_OPTION:
-            dynamo_db = os.environ.get("MOCKINGBIRD_DYNAMO_URL")
+            dynamo_db = os.environ.get("MOCKINGBIRD_DYNAMO_URL", "http://localhost:8000")
             return DynamoRepository(dynamo_url=dynamo_db)
         elif storage_cls == REDIS_OPTION:
             redis_host = os.environ.get("MOCKINGBIRD_REDIS_HOST")
