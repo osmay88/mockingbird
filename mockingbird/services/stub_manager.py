@@ -76,7 +76,7 @@ def create_stub(event):
     """
     Creates a new stub object and stores it into the database.
     """
-    log = get_logger("create_stub")
+    log = get_logger("create_stub_manager")
     log.info("Creating stub with params %s" % json.dumps(event))
     validate_stub(event)
     repository = Repository.get_repository()

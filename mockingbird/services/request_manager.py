@@ -1,5 +1,6 @@
 import json
 import re
+from http import HTTPStatus
 
 from mockingbird.services import stub_manager
 from mockingbird.utils import extract_namespace_from_url
@@ -31,8 +32,13 @@ def handle_request(path: str, method: str, headers: dict, body: dict):
     :return:
     """
     namespace = extract_namespace_from_url(path)
-    stubs = stub_manager.get_stub(namespace=namespace)
-    for stub in stubs["items"]:
+    possible_stubs = stub_manager.get_stub(namespace=namespace)
+    if not possible_stubs.get("Items"):
+        raise MockingException(error_code=HTTPStatus.NOT_FOUND,
+                               http_status_code=HTTPStatus.NOT_FOUND,
+                               msg="Cannot find any stub matching the criteria")
+
+    for stub in possible_stubs["items"]:
         url_pattern = stub["stub"]["request"]["url"]
         exp = re.compile(url_pattern)
         if exp.match(path):
