@@ -46,7 +46,7 @@ def validate_stub(stub_params):
 def store_stub(repo, item):
     log = get_logger("store_stub")
     new_stub = {
-        "id": str(uuid.uuid4()),
+        "id": item.get("id") or str(uuid.uuid4()),  # seems that wiremock creates his own ids
         "namespace": extract_namespace_from_url(item["request"]["url"]),
         "stub": item
     }

@@ -31,7 +31,7 @@ def create_stub(event: dict, context):
         return make_response(HTTPStatus.INTERNAL_SERVER_ERROR, error=str(err))
 
 
-def get_stub(event, context):
+def get_stub(event: dict, context):
     """
     returns all the stubs in the db
     """
@@ -50,3 +50,11 @@ def get_stub(event, context):
     except Exception as err:
         log.error("an exception has occur while getting the stub %s" % err)
         return make_response(HTTPStatus.BAD_REQUEST, error=str(err))
+
+
+def count_requests(event: dict, context = None):
+    pass
+
+
+def get_request(event: dict, context = None):
+    pass

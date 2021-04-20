@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import uuid4
 
 from pytest_mock import MockerFixture
@@ -130,4 +131,109 @@ def test_mock_it_return_response(mocker: MockerFixture):
     response = mock_it(request)
     assert response["statusCode"] == 200, "Should return the same status set in the mock"
     assert response["body"] == body_text, "the body text should match"
+    assert response["headers"]["Content-Type"] == body_headers, "The headers should match"
+
+
+def test_mock_with_templating_date(mocker: MockerFixture):
+    body_text = ' today is %s ' % datetime.now().strftime("%Y-%m-%d")
+    body_headers = uuid4().hex
+
+    def mock_get_stub(*args, **kwargs):
+        stub_body = {
+            "request": {
+                "method": "GET",
+                "url": "/namespace/thing"
+            },
+            "response": {
+                "status": 200,
+                "body": """ today is {% date '%Y-%m-%d' %} """,
+                "headers": {
+                    "Content-Type": body_headers
+                }
+            }
+        }
+
+        return {
+            "items": [
+                {"stub": stub_body}
+            ]
+        }
+
+    mocker.patch(
+        "mockingbird.services.stub_manager.get_stub",
+        mock_get_stub
+    )
+
+    request = {
+        "body": "This is a custom body",
+        "headers": {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Content-Length": "0",
+        },
+        "httpMethod": "POST",
+        "isBase64Encoded": False,
+        "multiValueQueryStringParameters": None,
+        "path": "/mock-it/namespace/thing",
+        "pathParameters": {
+            "event": "namespace/thing"
+        },
+    }
+
+    response = mock_it(request)
+    assert response["statusCode"] == 200, "Should return the same status set in the mock"
+    assert response["body"] == body_text, "the body text should match"
+    assert response["headers"]["Content-Type"] == body_headers, "The headers should match"
+
+
+def test_mock_with_templating_uuid(mocker: MockerFixture):
+    body_headers = uuid4().hex
+
+    def mock_get_stub(*args, **kwargs):
+        stub_body = {
+            "request": {
+                "method": "GET",
+                "url": "/namespace/thing"
+            },
+            "response": {
+                "status": 200,
+                "body": """ today is {% uuid %} """,
+                "headers": {
+                    "Content-Type": body_headers
+                }
+            }
+        }
+
+        return {
+            "items": [
+                {"stub": stub_body}
+            ]
+        }
+
+    mocker.patch(
+        "mockingbird.services.stub_manager.get_stub",
+        mock_get_stub
+    )
+
+    request = {
+        "body": "This is a custom body",
+        "headers": {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Content-Length": "0",
+        },
+        "httpMethod": "POST",
+        "isBase64Encoded": False,
+        "multiValueQueryStringParameters": None,
+        "path": "/mock-it/namespace/thing",
+        "pathParameters": {
+            "event": "namespace/thing"
+        },
+    }
+
+    response = mock_it(request)
+    assert response["statusCode"] == 200, "Should return the same status set in the mock"
+    assert len(response["body"]) == 43, "the body text length should match"
     assert response["headers"]["Content-Type"] == body_headers, "The headers should match"

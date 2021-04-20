@@ -55,7 +55,9 @@ def create_stub_(stub_id=None, *args, **kwargs):
         return response
     elif request.method == "POST":
         try:
-            data = get_data_from_request()
+            data = request.json or request.data.decode()
+            if isinstance(data, str):
+                data = json.loads(data)
             new_stub = create_stub(data)
             return jsonify(new_stub), 201
         except Exception as err:
@@ -64,6 +66,14 @@ def create_stub_(stub_id=None, *args, **kwargs):
     else:
         return "Uh yeah", 204
 
+
+@app.route("/__admin/requests", methods=["POST", "GET"])
+@app.route("/__admin/requests/count", methods=["PUT", "GET", "POST"])
+def get_request_data_(*args, **kwargs):
+    data = request.json or request.data.decode()
+    if isinstance(data, str):
+        data = json.loads(data)
+    return "This", 200
 
 if __name__ == "__main__":
     app.run(debug=False)

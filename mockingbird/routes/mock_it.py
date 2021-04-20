@@ -21,6 +21,8 @@ def mock_it(event: dict, context=None):
     if not path_event or path_event == "":
         return make_response(HTTPStatus.BAD_REQUEST, error="event path missing or empty")
 
+    path_event = path_event.rstrip("/")
+
     if not path_event.startswith("/"):
         path_event = "/" + path_event
 
