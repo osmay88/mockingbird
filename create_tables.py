@@ -3,7 +3,7 @@ import boto3
 
 from mockingbird.dynamo_tables import DYNAMO_TABLES
 
-DYNAMODB = os.environ.get("DYNAMO_URL", "http://localhost:8000")
+DYNAMODB = os.environ.get("MOCKINGBIRD_DYNAMO_URL", "http://localhost:8000")
 
 
 def create_secondary_index(secondary_index: dict):
@@ -23,4 +23,7 @@ def create_table(table_def: dict, secondary_index: dict):
 
 
 for tbl, secondary_index in DYNAMO_TABLES:
-    create_table(tbl, secondary_index)
+    try:
+        create_table(tbl, secondary_index)
+    except Exception as err:
+        print("%s: %s" % (str(err), tbl["TableName"],))
