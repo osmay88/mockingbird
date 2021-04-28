@@ -37,7 +37,7 @@ def mock_it(namespace, path, *args, **kwargs):
 @app.route("/__admin/mappings", methods=["POST", "GET"])
 @app.route("/__admin/mappings/<stub_id>", methods=["PUT", "GET"])
 def create_stub_(stub_id=None, *args, **kwargs):
-    LOGGER = get_logger("create_stub")
+    LOGGER = get_logger("web_app_admin_mappings")
 
     def get_data_from_request():
         if not request.json:

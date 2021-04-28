@@ -36,7 +36,7 @@ def test_proper_url_is_find(mocker: MockerFixture):
         mock_get_stub
     )
 
-    response = handle_request("/namespace/thing", "POST", dict(), dict())
+    response = handle_request("/namespace/thing", "GET", dict(), dict())
     assert response["body"] == text, "The text should match the original"
     assert response["statusCode"] == status_code, "The status code should match the stub one"
     assert "Custom-Header" in response["headers"].keys(), "The proper header should be set"
