@@ -13,16 +13,16 @@ class UrlMatcher:
         return stub_url == url
 
     @staticmethod
-    def url_matching(stub, pattern: str):
+    def url_matching(stub, url: str):
         """
         Check if a url match a regular expression
         :param stub:
-        :param pattern:
+        :param url:
         :return:
         """
         stub_url = stub["request"]["url"]
-        exp = re.compile(pattern)
-        return exp.fullmatch(stub_url) is not None
+        exp = re.compile(stub_url)
+        return exp.fullmatch(url) is not None
 
     @staticmethod
     def url_path_equal_to(stub, url):
