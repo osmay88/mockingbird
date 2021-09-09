@@ -12,3 +12,35 @@ STUB_TBL = {
     ],
     "BillingMode": "PAY_PER_REQUEST"
 }
+
+STUB_TBL_NAMESPACE_INDEX = "NamespaceIndex"
+
+STUB_TBL_SECONDARY_INDEX = {
+    "TableName": TABLE_NAME,
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "namespace",
+            "AttributeType": "S"
+        },
+    ],
+    "GlobalSecondaryIndexUpdates": [
+        {
+            "Create": {
+                "IndexName": STUB_TBL_NAMESPACE_INDEX,
+                "KeySchema": [
+                    {
+                        "AttributeName": "namespace",
+                        "KeyType": "HASH"
+                    }
+                ],
+                "Projection": {
+                    "ProjectionType": "ALL"
+                },
+                "ProvisionedThroughput": {
+                    "ReadCapacityUnits": 1,
+                    "WriteCapacityUnits": 1,
+                }
+            }
+        }
+    ],
+}

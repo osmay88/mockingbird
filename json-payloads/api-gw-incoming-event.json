@@ -1,0 +1,81 @@
+{
+    "body": null,
+    "headers": {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+        "Content-Length": "0",
+        "Host": "127.0.0.1:3000",
+        "Postman-Token": "455c2fa0-07f6-470b-be6c-9cfc3bef98c1",
+        "User-Agent": "PostmanRuntime/7.26.8",
+        "X-Forwarded-Port": "3000",
+        "X-Forwarded-Proto": "http"
+    },
+    "httpMethod": "POST",
+    "isBase64Encoded": false,
+    "multiValueHeaders": {
+        "Accept": [
+            "*/*"
+        ],
+        "Accept-Encoding": [
+            "gzip, deflate, br"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Content-Length": [
+            "0"
+        ],
+        "Host": [
+            "127.0.0.1:3000"
+        ],
+        "Postman-Token": [
+            "455c2fa0-07f6-470b-be6c-9cfc3bef98c1"
+        ],
+        "User-Agent": [
+            "PostmanRuntime/7.26.8"
+        ],
+        "X-Forwarded-Port": [
+            "3000"
+        ],
+        "X-Forwarded-Proto": [
+            "http"
+        ]
+    },
+    "multiValueQueryStringParameters": null,
+    "path": "/mock-it/some/thing/hey",
+    "pathParameters": {
+        "event": "some/thing/hey"
+    },
+    "queryStringParameters": null,
+    "requestContext": {
+        "accountId": "123456789012",
+        "apiId": "1234567890",
+        "domainName": "127.0.0.1:3000",
+        "extendedRequestId": null,
+        "httpMethod": "POST",
+        "identity": {
+            "accountId": null,
+            "apiKey": null,
+            "caller": null,
+            "cognitoAuthenticationProvider": null,
+            "cognitoAuthenticationType": null,
+            "cognitoIdentityPoolId": null,
+            "sourceIp": "127.0.0.1",
+            "user": null,
+            "userAgent": "Custom User Agent String",
+            "userArn": null
+        },
+        "path": "/mock-it/{event+}",
+        "protocol": "HTTP/1.1",
+        "requestId": "d05b3c0f-e151-4a3f-89b5-62d936deb520",
+        "requestTime": "22/Jan/2021:21:25:54 +0000",
+        "requestTimeEpoch": 1611350754,
+        "resourceId": "123456",
+        "resourcePath": "/mock-it/{event+}",
+        "stage": "Prod"
+    },
+    "resource": "/mock-it/{event+}",
+    "stageVariables": null,
+    "version": "1.0"
+}

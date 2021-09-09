@@ -1,3 +1,4 @@
+from os import environ
 from pytest_mock import MockerFixture
 from mockingbird.services.stub_manager import create_stub, get_stub
 
@@ -27,6 +28,8 @@ def init_mocks(mocker: MockerFixture):
     """
     init the most common mocks
     """
+    environ["MOCKINGBIRD_STORAGE"] = "Dynamo"
+
     def store_stub_mock(*args, **kwargs):
         return {
             "ResponseMetadata": {
@@ -84,7 +87,7 @@ def test_create_stub_wrong_schema(mocker: MockerFixture):
     try:
         create_stub(stub_body)
     except Exception as err:
-        assert str(err) == "The schema validation for the stub failed with error: 'request' is a required property"
+        assert str(err) == '{"error_code": 400, "error": "The schema validation for the stub failed with error: \'request\' is a required property"}'
         return
     assert False, "An exception should have been thrown since the schema is invalid"
 

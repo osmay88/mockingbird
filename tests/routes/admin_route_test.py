@@ -1,6 +1,7 @@
 import json
+from os import environ
 from pytest_mock import MockerFixture
-from mockingbird.admin_routes import create_stub
+from mockingbird.routes.admin_routes import create_stub
 
 
 def test_admin_create_stub(mocker: MockerFixture):
@@ -52,6 +53,8 @@ def test_create_stub_empty_body(mocker: MockerFixture):
 
 
 def test_create_stub_already_exists(mocker: MockerFixture):
+    environ["MOCKINGBIRD_STORAGE"] = "Dynamo"
+
     def get_url_hash_mock(*args, **kwargs):
         return [{
             "stub_id": "this_is_an_existing_stub"
@@ -83,3 +86,30 @@ def test_create_stub_already_exists(mocker: MockerFixture):
     response = create_stub(new_stub_request, None)
     assert response['statusCode'] == 400
     assert json.loads(response.get("body")) == {"error": "An stub already exist using the same url pattern, stub id: this_is_an_existing_stub"}
+
+
+def test_create_stub_general_exception(mocker: MockerFixture):
+    def raise_exception(*args, **kwargs):
+        raise Exception("this is a random exception")
+    mocker.patch("mockingbird.services.stub_manager.create_stub", raise_exception)
+    stub_body = {
+        "request": {
+            "method": "GET",
+            "url": "/some/thing"
+        },
+        "response": {
+            "status": 200,
+            "body": "Hello world!",
+            "headers": {
+                "Content-Type": "text/plain"
+            }
+        }
+    }
+
+    new_stub_request = {
+        "body": json.dumps(stub_body)
+    }
+
+    response = create_stub(new_stub_request, None)
+    assert response["statusCode"] == 500
+    assert response["body"] == '{"error": "this is a random exception"}'
