@@ -18,3 +18,8 @@ def extract_namespace_from_url(url: str):
         return ""
     else:
         return tokenized[1]
+
+
+def extract_path_url(_url: str):
+    path, _ = _url.split("?")
+    return path
