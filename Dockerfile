@@ -5,7 +5,6 @@ RUN apt-get update -y && \
 
 WORKDIR /app
 
-# We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
 
 RUN python3 -m venv venv
@@ -15,6 +14,4 @@ RUN ./venv/bin/pip install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "./" ]
-
-CMD venv/bin/python3 web_runner/main_app.py
+ENV FLASK_APP=web_runner.main_app:app
