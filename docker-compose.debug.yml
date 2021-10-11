@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+  dynamo-local:
+    container_name: dynamo-local
+    image: amazon/dynamodb-local
+    ports:
+      - "8000:8000"
+
+  web:
+    build: .
+    image: web_runner
+    container_name: web_runner
+    ports:
+      - "5000:5000"
+      - "5678:5678"
+    command: ["sh", "-c", "./venv/bin/pip install debugpy -t /tmp && echo 'Waiting for debuuger to connect' && ./venv/bin/python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 ./venv/bin/flask run -h 0.0.0.0"]
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - FLASK_DEBUG=1
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=EXAMPLE
+      - AWS_SECRET_ACCESS_KEY=EXAMPLEKEY
+      - MOCKINGBIRD_DYNAMO_URL=http://dynamo-local:8000
+    depends_on:
+      - dynamo-local
+    links:
+      - dynamo-local
